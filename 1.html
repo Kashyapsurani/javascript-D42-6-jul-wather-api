@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .weather {
+            display: flex;
+            flex-direction: column;
+            margin-left: auto;
+            margin-right: auto;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 10px;
+            width: 200px;
+            box-shadow: black;
+            background-color: rgb(217, 217, 217);
+            color: rgb(0, 0, 0);
+            display: none;
+            /* Initially hide the weather card */
+        }
+
+        .weather h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .temp,
+        .weather-desc,
+        .humidity,
+        .wind {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .temp span,
+        .humidity span,
+        .wind span {
+            font-size: 18px;
+            margin-right: 5px;
+        }
+
+        .desc{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .desc img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .desc span {
+            font-size: 18px;
+        }
+
+        #search-input{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 300px;
+            height: 35px;
+    }
+
+    .search-button{
+        width: 250px;
+        height: 30px;
+        margin-top: 20px;
+    }
+
+    form{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    input{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+        
+    </style>
+</head>
+
+<body>
+    <div>
+        <form>
+            <div>
+                <input type="text" id="search-input" placeholder="Search for a city">
+                <center><button type="submit" class="search-button">Search</button></center>
+                <h1>
+                    Weather App
+                </h1>
+            </div>
+        
+        </form>
+        <div class="weather">
+            <h2 id="city"></h2>
+            <div class="temp">
+                <span id="temp"></span>
+                <span>&deg;C</span>
+            </div>
+            <div class="desc">
+                <img id="icon" src="" alt="Weather Icon">
+                <span id="weather-desc"></span>
+            </div>
+            <div class="wind">
+                <span id="speed"></span>
+                <span>m/s</span>
+            </div>
+        </div>
+        
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            let inputVal = document.getElementById('search-input').value;
+
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputVal}&appid=678d32c42c9793d18d90089053b0bf84&units=metric`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('city').innerText = data.name;
+                    document.getElementById('temp').innerText = data.main.temp;
+                    document.getElementById('icon').src = `http://openweathermap.org/img/w/${data.weather[0].icon}.png`;
+                    document.getElementById('weather-desc').innerText = data.weather[0].description;
+                    document.getElementById('speed').innerText = data.wind.speed;
+                    document.querySelector('.weather').style.display = 'flex'; // Show the weather card if API response is successful
+                })
+                .catch(() => {
+                    document.querySelector('.weather').style.display = 'none'; // Hide the weather card if API response fails
+                });
+        });
+    </script>
+    </script>
+</body>
+
+</html>
